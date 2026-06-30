@@ -10,7 +10,9 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderXmlParser {
 
     public List<OrderGroupDto> parse(String rawXml) throws Exception {

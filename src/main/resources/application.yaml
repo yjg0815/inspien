@@ -22,12 +22,11 @@ server:
 eai:
   ftp:
     host: ${EAI_FTP_HOST}
-    port: 21
+    port: ${EAI_FTP_PORT}
     username: ${EAI_FTP_USERNAME}
     password: ${EAI_FTP_PASSWORD}
+    path: ${EAI_FTP_PATH}
   applicant:
     key: ${EAI_APPLICANT_KEY}
-    name: 진경
+    name: ${EAI_APPLICANT_NAME}
     phone: ${EAI_APPLICANT_PHONE}
-  log:
-    path: ./logs/eai-log.txt
