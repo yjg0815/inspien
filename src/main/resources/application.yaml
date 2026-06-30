@@ -1,10 +1,12 @@
 spring:
   application:
     name: inspien
+  config:
+    import: optional:file:./src/main/resources/application-secret.yml
   datasource:
-    url: jdbc:mysql://{HOST}:{PORT}/{DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: "DB_USERNAME"
-    password: "DB_PASSWORD"
+    url: ${EAI_DB_URL}
+    username: ${EAI_DB_USERNAME}
+    password: ${EAI_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -19,13 +21,13 @@ server:
 
 eai:
   ftp:
-    host: {FTP_HOST}
+    host: ${EAI_FTP_HOST}
     port: 21
-    username: {FTP_USERNAME}
-    password: {FTP_PASSWORD}
+    username: ${EAI_FTP_USERNAME}
+    password: ${EAI_FTP_PASSWORD}
   applicant:
-    key: {APPLICANT_KEY}
-    name: {진경}
-    phone: "010-2440-4379"
+    key: ${EAI_APPLICANT_KEY}
+    name: 진경
+    phone: ${EAI_APPLICANT_PHONE}
   log:
     path: ./logs/eai-log.txt
