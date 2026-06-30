@@ -2,7 +2,7 @@ spring:
   application:
     name: inspien
   config:
-    import: optional:file:./src/main/resources/application-secret.yml
+    import: optional:file:./src/main/resources/application-secret.yaml
   datasource:
     url: ${EAI_DB_URL}
     username: ${EAI_DB_USERNAME}
