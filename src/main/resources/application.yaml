@@ -2,12 +2,12 @@ spring:
   application:
     name: inspien
   config:
-    import: optional:file:./src/main/resources/application-secret.yml
+    import: optional:file:./src/main/resources/application-secret.yaml
   datasource:
     url: ${EAI_DB_URL}
     username: ${EAI_DB_USERNAME}
     password: ${EAI_DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     hibernate:
       ddl-auto: none
