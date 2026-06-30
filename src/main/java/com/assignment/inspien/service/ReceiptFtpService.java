@@ -59,6 +59,7 @@ public class ReceiptFtpService {
     }
 
     private void connect(final FTPClient ftpClient) throws Exception {
+        ftpClient.setControlEncoding("EUC-KR");
         ftpClient.connect(ftpHost, ftpPort);
         ftpClient.login(ftpUsername, ftpPassword);
         ftpClient.enterLocalPassiveMode();
