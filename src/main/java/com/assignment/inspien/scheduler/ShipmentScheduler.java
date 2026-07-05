@@ -15,8 +15,12 @@ public class ShipmentScheduler {
 
     @Scheduled(fixedDelayString = "${eai.batch.shipment-interval-ms}")
     public void run() {
-        log.info("운송 배치 시작");
-        shipmentService.processShipment();
-        log.info("운송 배치 종료");
+        try {
+            log.info("운송 배치 시작");
+            shipmentService.processShipment();
+            log.info("운송 배치 종료");
+        } catch (Exception e) {
+            log.error("운송 배치 실패", e);
+        }
     }
 }

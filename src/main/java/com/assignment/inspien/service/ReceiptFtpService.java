@@ -39,6 +39,9 @@ public class ReceiptFtpService {
     @Value("${eai.ftp.path}")
     private String ftpPath;
 
+    @Value("${eai.ftp.retry-count}")
+    private int retryCount;
+
     @Value("${eai.applicant.name}")
     private String applicantName;
 
@@ -46,16 +49,33 @@ public class ReceiptFtpService {
         String fileName = generateFileName();
         String content = ReceiptFileConverter.toFileContent(orders);
 
-        FTPClient ftpClient = new FTPClient();
-        try {
-            connect(ftpClient);
-            upload(ftpClient, fileName, content);
-        } catch (Exception e) {
-            log.error("FTP 영수증 전송 실패", e);
-            throw new ExceptionHandler(OrderErrorCode.FTP_TRANSFER_FAILED);
-        } finally {
-            disconnect(ftpClient);
+        Exception lastException = null;
+
+        for (int attempt = 1; attempt <= retryCount; attempt++) {
+            FTPClient ftpClient = new FTPClient();
+            try {
+                connect(ftpClient);
+                upload(ftpClient, fileName, content);
+                log.info("FTP 전송 성공 (시도 {}/{}): {}", attempt, retryCount, fileName);
+                return;
+            } catch (Exception e) {
+                lastException = e;
+                log.warn("FTP 전송 실패 (시도 {}/{}): {}", attempt, retryCount, e.getMessage());
+                if (attempt < retryCount) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            } finally {
+                disconnect(ftpClient);
+            }
         }
+
+        log.error("FTP 전송 최종 실패 ({}회 시도): {}", retryCount, fileName, lastException);
+        throw new ExceptionHandler(OrderErrorCode.FTP_TRANSFER_FAILED);
     }
 
     private void connect(final FTPClient ftpClient) throws Exception {

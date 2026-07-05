@@ -26,12 +26,13 @@ eai:
     username: ${EAI_FTP_USERNAME}
     password: ${EAI_FTP_PASSWORD}
     path: ${EAI_FTP_PATH}
+    retry-count: 3
   applicant:
     key: ${EAI_APPLICANT_KEY}
     name: ${EAI_APPLICANT_NAME}
     phone: ${EAI_APPLICANT_PHONE}
   batch:
-    shipment-interval-ms: 300000
+    shipment-interval-ms: 10000
 
 springdoc:
   api-docs:
@@ -39,3 +40,12 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+logging:
+  file:
+    name: ./logs/eai-log.txt
+  level:
+    root: INFO
+    com.assignment.inspien: DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
