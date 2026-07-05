@@ -31,13 +31,18 @@ public class OrderService {
 
     @Transactional
     public void processOrder(String rawXml) {
+        log.info("[Sender] 주문 요청 수신");
+    
         List<OrderGroupDto> groups = parseXml(rawXml);
         orderValidator.validate(groups);
-
+        log.info("[Mapper] XML 파싱 및 데이터 변환 완료 - {}건", groups.stream().mapToInt(g -> g.getItems().size()).sum());
+    
         List<Order> orders = OrderConverter.toOrders(groups, applicantKey);
         saveOrders(orders);
-
+        log.info("[Receiver-DB] ORDER_TB 적재 완료 - {}건", orders.size());
+    
         receiptFtpService.sendReceipt(orders);
+        log.info("[Receiver-FTP] 영수증 파일 전송 완료");
     }
 
     private List<OrderGroupDto> parseXml(String rawXml) {
