@@ -5,21 +5,24 @@ import com.assignment.inspien.domain.Shipment;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ShipmentConverter {
 
     public static List<Shipment> toShipments(final List<Order> orders) {
-        return orders.stream()
-                .map(ShipmentConverter::toShipment)
-                .collect(Collectors.toList());
+        List<Shipment> shipments = new ArrayList<>();
+        int sequence = 0;
+        for (Order order : orders) {
+            shipments.add(toShipment(order, sequence++));
+        }
+        return shipments;
     }
 
-    private static Shipment toShipment(final Order order) {
+    private static Shipment toShipment(final Order order, final int sequence) {
         return Shipment.builder()
-                .shipmentId(generateShipmentId(order))
+                .shipmentId(generateShipmentId(sequence))
                 .applicantKey(order.getApplicantKey())
                 .orderId(order.getOrderId())
                 .itemId(order.getItemId())
@@ -27,7 +30,9 @@ public class ShipmentConverter {
                 .build();
     }
 
-    private static String generateShipmentId(final Order order) {
-        return "S_" + order.getOrderId();
+    private static String generateShipmentId(final int sequence) {
+        char alphabet = (char) ('A' + (sequence % 26));
+        int number = (int) (System.currentTimeMillis() % 1000);
+        return alphabet + String.format("%03d", (number + sequence) % 1000);
     }
 }
