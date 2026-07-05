@@ -30,6 +30,8 @@ eai:
     key: ${EAI_APPLICANT_KEY}
     name: ${EAI_APPLICANT_NAME}
     phone: ${EAI_APPLICANT_PHONE}
+  batch:
+    shipment-interval-ms: 300000
 
 springdoc:
   api-docs:
