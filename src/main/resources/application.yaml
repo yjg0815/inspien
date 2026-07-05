@@ -2,12 +2,12 @@ spring:
   application:
     name: inspien
   config:
-    import: optional:file:./src/main/resources/application-secret.yml
+    import: optional:file:./src/main/resources/application-secret.yaml
   datasource:
     url: ${EAI_DB_URL}
     username: ${EAI_DB_USERNAME}
     password: ${EAI_DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     hibernate:
       ddl-auto: none
@@ -22,12 +22,30 @@ server:
 eai:
   ftp:
     host: ${EAI_FTP_HOST}
-    port: 21
+    port: ${EAI_FTP_PORT}
     username: ${EAI_FTP_USERNAME}
     password: ${EAI_FTP_PASSWORD}
+    path: ${EAI_FTP_PATH}
+    retry-count: 3
   applicant:
     key: ${EAI_APPLICANT_KEY}
-    name: 진경
+    name: ${EAI_APPLICANT_NAME}
     phone: ${EAI_APPLICANT_PHONE}
-  log:
-    path: ./logs/eai-log.txt
+  batch:
+    shipment-interval-ms: 10000
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+logging:
+  file:
+    name: ./logs/eai-log.txt
+  level:
+    root: INFO
+    com.assignment.inspien: DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
