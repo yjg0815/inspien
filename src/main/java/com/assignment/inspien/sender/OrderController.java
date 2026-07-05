@@ -1,4 +1,4 @@
-package com.assignment.inspien.controller;
+package com.assignment.inspien.sender;
 
 import com.assignment.inspien.apiPayload.ApiResponse;
 import com.assignment.inspien.apiPayload.code.success.OrderSuccessCode;

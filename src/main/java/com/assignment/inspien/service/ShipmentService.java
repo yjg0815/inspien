@@ -1,8 +1,8 @@
 package com.assignment.inspien.service;
 
-import com.assignment.inspien.converter.ShipmentConverter;
 import com.assignment.inspien.domain.Order;
 import com.assignment.inspien.domain.Shipment;
+import com.assignment.inspien.mapper.ShipmentConverter;
 import com.assignment.inspien.repository.OrderRepository;
 import com.assignment.inspien.repository.ShipmentRepository;
 import lombok.RequiredArgsConstructor;

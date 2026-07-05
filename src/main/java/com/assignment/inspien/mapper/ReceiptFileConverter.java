@@ -1,4 +1,4 @@
-package com.assignment.inspien.converter;
+package com.assignment.inspien.mapper;
 
 import com.assignment.inspien.domain.Order;
 import lombok.AccessLevel;
