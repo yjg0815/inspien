@@ -30,16 +30,17 @@ public class FetchConnectionInfo {
                 name, phone, email
         );
 
-        HttpURLConnection conn = (HttpURLConnection) URI.create(apiUrl).toURL().openConnection();
+        HttpURLConnection conn = (HttpURLConnection) URI.create(apiUrl).toURL().openConnection(); // 연결 객체 생성
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
         String auth = authUsername + ":" + authPassword;
-        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
-        conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+        // 헤더에 auth 설정 -> ASCII만 받을 수 있기 때문에 Base64로 인코딩
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8)); 
+        conn.setRequestProperty("Authorization", "Basic " + encodedAuth); // 헤더 설정 
 
         conn.setDoOutput(true);
-        try (OutputStream os = conn.getOutputStream()) {
+        try (OutputStream os = conn.getOutputStream()) { // 서버 연결 -> TLS 핸드셰이킹 -> 암호화 후 전송 
             os.write(requestBody.getBytes(StandardCharsets.UTF_8));
         }
 
@@ -109,15 +110,16 @@ public class FetchConnectionInfo {
             System.out.println("(필드 없음)");
             return;
         }
-        String[] pairs = jsonObjectRaw.split(",");
+        String[] pairs = jsonObjectRaw.split(","); // object 값 ,로 분리 
         for (String pair : pairs) {
-            String[] kv = pair.split(":", 2);
+            String[] kv = pair.split(":", 2); // key:value 분리 
             if (kv.length < 2) continue;
+            // 따옴표, 공백 제거 
             String key = kv[0].replaceAll("[\"{}\\s]", "");
             String value = kv[1].replaceAll("[\"{}\\s]", "");
             if (value.isEmpty()) continue;
             try {
-                String decrypted = AesDecryptUtil.decrypt(value, phone);
+                String decrypted = AesDecryptUtil.decrypt(value, phone); // 폰 번호로 복호화 
                 System.out.println(key + " = " + decrypted);
             } catch (Exception e) {
                 System.out.println(key + " (복호화 실패, 원문 출력) = " + value);
@@ -125,13 +127,13 @@ public class FetchConnectionInfo {
         }
     }
 
-    private static String extractJsonValue(String json, String key) {
+    private static String extractJsonValue(String json, String key) { // key : value -> value 값 꺼내기
         String pattern = "\"" + key + "\"\\s*:\\s*\"([^\"]*)\"";
         java.util.regex.Matcher m = java.util.regex.Pattern.compile(pattern).matcher(json);
         return m.find() ? m.group(1) : null;
     }
 
-    private static String extractJsonObject(String json, String key) {
+    private static String extractJsonObject(String json, String key) { // key : { , , } -> object 값 꺼내기 
         String pattern = "\"" + key + "\"\\s*:\\s*\\{([^}]*)\\}";
         java.util.regex.Matcher m = java.util.regex.Pattern.compile(pattern).matcher(json);
         return m.find() ? m.group(1) : null;
