@@ -50,6 +50,9 @@ public class ReceiptFtpService {
         String fileName = generateFileName();
         String content = ReceiptFileConverter.toFileContent(orders);
 
+        log.info("영수증 파일 생성 - 파일명: {}, 주문 {}건", fileName, orders.size());
+        log.debug("영수증 파일 내용:\n{}", content); // DEBUG 레벨로 분리
+
         Exception lastException = null;
 
         for (int attempt = 1; attempt <= retryCount; attempt++) {

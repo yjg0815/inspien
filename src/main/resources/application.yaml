@@ -32,7 +32,7 @@ eai:
     name: ${EAI_APPLICANT_NAME}
     phone: ${EAI_APPLICANT_PHONE}
   batch:
-    shipment-interval-ms: 10000
+    shipment-interval-ms: 200000
 
 springdoc:
   api-docs:
